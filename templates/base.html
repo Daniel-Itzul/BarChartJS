@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Django + Charts.js</title>
+
+    {% include 'base/css.html' %}
+    {% include 'base/bootstrap_defaults.html' %}
+    <script>
+    var defaultData = []
+    var dataLabels = []
+    var theChart = []
+    dataLabels = genDataLabels()
+    defaultData = genDefaultData()
+    
+    function setTimer(milSec){
+      setInterval(updateChart,milSec);
+    }
+        
+    function updateChart(){
+        for (i=0; i<20; i++) {
+            theChart.data.datasets[0].data[i] = updateDataPoint(theChart.data.datasets[0].data[i]);
+        }
+        console.log (theChart.data.datasets[0].data);
+        theChart.update();
+    }
+    
+    function drawChart() {
+        setChart();
+        setTimer(1500);
+    }
+    
+    function setChart(){
+            Chart.scaleService.updateScaleDefaults('linear', {
+                ticks: {
+                    min: 0
+                }
+            });        
+            var ctx = document.getElementById("myBarChart").getContext("2d");
+            theChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dataLabels,
+                    datasets: [{
+                        label: "Revenues Generated",
+                        data: defaultData,
+                        backgroundColor: [
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)',
+                'rgba(0, 0, 0, 0.5)'
+            ],
+            borderColor: [
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)',
+                'rgba(0,0,0,1)'
+            ],
+            borderWidth: 1
+                    }]
+
+                }
+            });
+    }
+
+    function genDataLabels(){
+        var dataLabels = [];
+        var header="TVM ";
+        var text ="";
+        var j=0;
+        for (i=0; i<20; i++){
+            j = i+1;
+            dataLabels[i]= header.concat(j.toString());
+        }
+        return(dataLabels)
+    }
+
+    function genDefaultData(){
+        var defaultData = [];
+        var multiplier = 10000;
+        for (i=0; i<20; i++){
+            defaultData[i] = Math.round(Math.random()*multiplier);
+
+        }
+         return(defaultData)
+    }
+      
+    function updateDataPoint(sourceDataPoint){
+        var updatedDataPoint = 0;
+        var multiplier = 1000;
+        updatedDataPoint = sourceDataPoint + (Math.round(Math.random()*multiplier));
+        return(updatedDataPoint)
+    }
+        
+        
+    </script>
+  </head>
+  <body  onload="drawChart()"> <!--onload= &&-->
+    <div>
+    {% block content %}
+    {% endblock content %}
+    </div>
+    {% include 'base/js.html' %}
+    <script>
+    $(document).ready(function(){
+      {% block jquery %}{% endblock %}
+    })
+    </script>
+  </body>
+</html>
